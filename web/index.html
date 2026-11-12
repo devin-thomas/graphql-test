@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0e1423" />
+  <title>CaseGraph — GraphQL Support Operations</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">◈</div><div><strong>CaseGraph</strong><span>SUPPORT OPERATIONS / GRAPHQL</span></div></div>
+    <div class="header-right"><span class="online"><span class="live-dot"></span> SQLite connected</span><a class="header-link" href="/graphql" target="_blank" rel="noopener">GraphiQL ↗</a></div>
+  </header>
+  <main class="shell">
+    <section class="intro">
+      <div><div class="eyebrow">CASE INVESTIGATION PLATFORM <span class="version">v1.0</span></div><h1>Support cases, <em>connected.</em></h1><p>Explore real GraphQL operations against a persistent database. Investigate incidents, trace events, and reproduce API failures.</p></div>
+      <button class="primary" id="createBtn">+ New case</button>
+    </section>
+    <section class="metrics" id="metrics" aria-label="Case metrics"><div class="skeleton">Loading case metrics…</div></section>
+    <section class="workspace">
+      <div class="panel cases-panel">
+        <div class="panel-heading"><div><div class="eyebrow">CASE QUEUE</div><h2>All support cases</h2></div><span class="count" id="queueCount">—</span></div>
+        <div class="filters"><label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search subjects or details" aria-label="Search cases" /></label><select id="statusFilter" aria-label="Filter case status"><option value="">All statuses</option><option>NEW</option><option>IN_PROGRESS</option><option>WAITING_ON_CUSTOMER</option><option>RESOLVED</option></select><select id="severityFilter" aria-label="Filter severity"><option value="">All priorities</option><option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></div>
+        <div id="caseList" class="case-list"><p class="muted centered">Loading cases…</p></div>
+        <div class="queue-footer"><button id="moreBtn" class="ghost" hidden>Load more cases ↓</button><span id="queueDescription">GraphQL cursor pagination</span></div>
+      </div>
+      <aside class="panel detail-panel" id="detailPanel"><div class="detail-empty"><div class="empty-icon">◇</div><h3>Select a case to investigate</h3><p>Inspect its relationships, recent events, and assignment history. Mutations are protected by a bearer token.</p></div></aside>
+    </section>
+    <section class="lab panel" id="lab">
+      <div class="lab-heading"><div><div class="eyebrow">DEVELOPER TOOLING</div><h2>GraphQL Request Lab</h2><p>Send operations, inspect structured responses, and intentionally reproduce common API problems.</p></div><a class="ghost link-button" href="/graphql" target="_blank" rel="noopener">Open GraphiQL ↗</a></div>
+      <div class="lab-grid">
+        <div><label for="preset" class="field-label">Example operation</label><select id="preset"><option value="caseDetails">Nested relations</option><option value="cursor">Cursor pagination</option><option value="metrics">Operational metrics</option><option value="mutation">Authenticated mutation</option><option value="validation">Schema validation failure</option><option value="notFound">Missing case</option></select><label class="field-label" for="queryInput">Query</label><textarea id="queryInput" class="codearea" spellcheck="false" rows="11"></textarea><label class="field-label" for="variablesInput">Variables (JSON)</label><textarea id="variablesInput" class="codearea small" spellcheck="false" rows="3">{}</textarea><div class="run-row"><button id="runBtn" class="primary">▶ Run operation</button><span class="muted small-text">POST /graphql</span></div></div>
+        <div><div class="response-heading"><span class="field-label">API response</span><span id="responseMeta" class="pill">Not run</span></div><pre class="response" id="responseOutput">{
+  "hint": "Run an example to see GraphQL's data and errors fields."
+}</pre><p class="subtle">Look for <code>errors[].extensions.code</code> and <code>X-Request-ID</code> when troubleshooting.</p></div>
+      </div>
+    </section>
+    <footer><span>CaseGraph • Synthetic customer data • TypeScript + GraphQL Yoga + SQLite</span><a href="https://graphql.org/learn/" target="_blank" rel="noopener">GraphQL learning resources ↗</a></footer>
+  </main>
+  <dialog id="createDialog"><form id="createForm" class="dialog-body"><div class="dialog-top"><div><span class="eyebrow">NEW SUPPORT CASE</span><h2>Create case</h2></div><button type="button" class="close" id="cancelCreate" aria-label="Close">×</button></div><p class="muted">This runs a real <code>createCase</code> GraphQL mutation, backed by SQLite.</p><label class="field-label" for="newCustomer">Customer</label><select id="newCustomer" required></select><label class="field-label" for="newSeverity">Priority</label><select id="newSeverity"><option>MEDIUM</option><option>LOW</option><option>HIGH</option><option>CRITICAL</option></select><label class="field-label" for="newSubject">Subject</label><input id="newSubject" maxlength="120" required placeholder="e.g. OAuth refresh token fails" /><label class="field-label" for="newDescription">Description</label><textarea id="newDescription" maxlength="2000" rows="4" required placeholder="What happened? Expected vs actual behavior, reproduction steps..."></textarea><div class="auth-reminder">Mutations require a token. Configure it in the credentials panel.</div><div class="dialog-actions"><button class="ghost" type="button" id="cancelCreate2">Cancel</button><button class="primary" type="submit">Create case</button></div></form></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <section class="auth-dock"><button id="authToggle" class="auth-open">⚿ <span id="authState">Read-only session</span> <span>⌃</span></button><div id="authPanel" hidden><p class="muted">Read access is public for synthetic data. Mutations require the token from your local <code>.env</code> file.</p><label class="field-label" for="writeToken">Write bearer token</label><input id="writeToken" type="password" autocomplete="off" placeholder="Paste token from .env" /><div class="auth-actions"><button class="ghost" id="clearToken">Clear</button><button class="primary" id="saveToken">Save for this tab</button></div><p class="subtle">Stored only in this tab's session storage; never embedded in source code.</p></div></section>
+</body>
+</html>

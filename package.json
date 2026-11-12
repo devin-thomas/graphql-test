@@ -1,0 +1,24 @@
+{
+  "name": "casegraph",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A real GraphQL support-case investigation app with persistent SQLite, mutations and troubleshooting drills",
+  "engines": { "node": ">=22.16.0" },
+  "scripts": {
+    "dev": "node --experimental-strip-types --env-file-if-exists=.env --watch src/server.ts",
+    "start": "node --experimental-strip-types --env-file-if-exists=.env src/server.ts",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "test:store": "node --experimental-strip-types --test tests/store.test.ts",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test"
+  },
+  "dependencies": {
+    "graphql": "^16.11.0",
+    "graphql-yoga": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.9.3"
+  }
+}

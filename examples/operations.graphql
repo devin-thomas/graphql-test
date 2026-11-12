@@ -1,0 +1,35 @@
+# Paste any query into http://localhost:4000/graphql (GraphiQL).
+# Database contains synthetic accounts, agents, tickets and events.
+
+query QueueWithRelations {
+  metrics { total new inProgress waiting resolved }
+  cases(first: 5, status: IN_PROGRESS) {
+    totalCount
+    edges {
+      cursor
+      node {
+        id subject severity status
+        customer { id name plan }
+        assignee { name team }
+        events(first: 10) { type message actor createdAt }
+      }
+    }
+    pageInfo { hasNextPage endCursor }
+  }
+}
+
+# Example mutation (requires Authorization: Bearer <CASEGRAPH_WRITE_TOKEN>)
+mutation CreateInvestigation($input: CreateCaseInput!) {
+  createCase(input: $input) { id subject status customer { name } }
+}
+# Variables: {"input":{"customerId":"1","subject":"GraphQL response fails","description":"Repro steps and logs here","severity":"HIGH"}}
+
+# Invalid selection: GraphQL schema validation should return errors without data.
+query FieldDoesNotExist {
+  case(id: "1") { id madeUpField }
+}
+
+# A working query with a null result: no error, because case is nullable.
+query NotFoundCase {
+  case(id: "999999") { id subject status }
+}
