@@ -12,7 +12,7 @@ const yoga = createYoga({
   graphiql: { title: 'CaseGraph — GraphiQL' },
   context: ({ request }) => ({
     store,
-    token: undefined,
+    token: undefined as string | undefined,
     actor: 'Public playground',
     requestId: request.headers.get('x-request-id') || randomUUID()
   })

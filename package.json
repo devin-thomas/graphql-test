@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "A real GraphQL support-case investigation app with persistent SQLite, mutations and troubleshooting drills",
-  "engines": { "node": ">=22.16.0" },
+  "engines": { "node": "22.x" },
   "scripts": {
     "dev": "node --experimental-strip-types --env-file-if-exists=.env --watch src/server.ts",
     "start": "node --experimental-strip-types --env-file-if-exists=.env src/server.ts",
