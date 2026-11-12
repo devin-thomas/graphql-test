@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080e1b">
+  <meta name="description" content="CaseGraph is an interactive GraphQL field guide: run real queries against a synthetic support-case API, explore its schema, and learn to debug responses.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CaseGraph — A GraphQL field guide">
+  <meta property="og:description" content="One endpoint. Connected data. A real, interactive GraphQL playground built with TypeScript.">
+  <title>CaseGraph — Learn GraphQL by using it</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/site.css">
+  <script defer src="/site.js"></script>
+</head>
+<body>
+  <div class="site-bg" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="CaseGraph home"><span class="brand-mark"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="6" cy="7" r="3" fill="#8D9BFF"/><circle cx="23" cy="8" r="3" fill="#53E6D1"/><circle cx="14" cy="22" r="3" fill="#A899FF"/><path d="M8.5 8.3L20.3 8M7.4 9.5L12.7 19.4M21.2 10.7L15.4 19.4" stroke="white" stroke-opacity=".65" stroke-width="1.3"/></svg></span><span>case<span class="brand-light">graph</span><small>GRAPHQL FIELD GUIDE</small></span></a>
+      <nav class="site-nav" aria-label="Main navigation"><a href="#learn">How it works</a><a href="#playground">Playground</a><a href="#debugging">Debugging</a><a href="#architecture">Architecture</a></nav>
+      <a class="nav-cta" href="https://github.com/devin-thomas/graphql-test" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main id="top">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <div class="overline"><span class="overline-led"></span> AN INTERACTIVE API EXPLORATION <span class="overline-v">01 / 04</span></div>
+        <h1>Explore the graph.<br><span>Understand the data.</span></h1>
+        <p class="hero-description">What if one request could return a support case, its customer, assigned engineer, and event history—without another endpoint? <strong>CaseGraph</strong> lets you find out by writing and running real GraphQL.</p>
+        <div class="hero-actions"><a class="button button-primary" href="#playground">Open live playground <span aria-hidden="true">↗</span></a><a class="button button-secondary" href="#learn">How GraphQL works <span aria-hidden="true">↓</span></a></div>
+        <div class="hero-facts"><div><span class="fact-value">01</span><span class="fact-caption">GraphQL endpoint</span></div><div><span class="fact-value">07</span><span class="fact-caption">Seeded support cases</span></div><div><span class="fact-value">100%</span><span class="fact-caption">Synthetic demo data</span></div></div>
+      </div>
+      <div class="hero-demo" aria-label="Example GraphQL query and response">
+        <div class="demo-top"><div class="window-buttons"><i></i><i></i><i></i></div><span>support-case.graphql</span><span class="demo-badge">GRAPHQL</span></div>
+        <pre class="demo-code"><span class="syntax-key">query</span> <span class="syntax-name">GetCase</span> {
+  <span class="syntax-field">case</span>(id: <span class="syntax-string">"1"</span>) {
+    <span class="syntax-field">subject</span>
+    <span class="syntax-field">severity</span>
+    <span class="syntax-field">customer</span> {
+      <span class="syntax-field">name</span>
+      <span class="syntax-field">plan</span>
+    }
+    <span class="syntax-field">assignee</span> {
+      <span class="syntax-field">name</span>
+    }
+  }
+}</pre>
+        <div class="demo-response"><div><span class="response-icon">✓</span> one request <span class="response-path">POST /graphql</span></div><div class="response-lines"><span class="response-bar w1"></span><span class="response-bar w2"></span><span class="response-bar w3"></span></div></div>
+        <div class="floating-node node-one" aria-hidden="true"><span class="node-dot purple"></span> Customer <span class="arrow">↗</span></div><div class="floating-node node-two" aria-hidden="true"><span class="node-dot mint"></span> CaseEvent <span class="arrow">↗</span></div>
+      </div>
+    </section>
+
+    <div class="section-divider wrap"><span>LEARN BY DOING</span><div></div><span>SCROLL TO EXPLORE ↓</span></div>
+
+    <section class="learn wrap" id="learn">
+      <div class="section-heading"><div class="section-kicker"><span>01</span> / THE IDEA</div><h2>The data you need.<br><span>Nothing you don’t.</span></h2><p>REST often needs multiple trips to collect related records. GraphQL lets the client describe its required shape, while the server validates the request against a typed schema.</p></div>
+      <div class="compare-grid">
+        <article class="compare-card compare-rest"><div class="compare-title"><span class="compare-icon">↗</span><h3>A REST-shaped workflow</h3><span class="compare-label">MULTIPLE REQUESTS</span></div><div class="route-list"><div><span>GET</span> /cases/1 <b>200</b></div><div><span>GET</span> /customers/1 <b>200</b></div><div><span>GET</span> /agents/1 <b>200</b></div><div><span>GET</span> /cases/1/events <b>200</b></div></div><p>Each endpoint defines its own response, even when you only need a couple of fields.</p></article>
+        <article class="compare-card compare-graphql"><div class="compare-title"><span class="compare-icon">◇</span><h3>The GraphQL approach</h3><span class="compare-label highlight-label">ONE REQUEST</span></div><pre><span class="syntax-key">query</span> {
+  <span class="syntax-field">case</span>(id: <span class="syntax-string">"1"</span>) {
+    <span class="syntax-field">subject</span>
+    <span class="syntax-field">customer</span> { <span class="syntax-field">name</span> }
+    <span class="syntax-field">assignee</span> { <span class="syntax-field">name</span> }
+    <span class="syntax-field">events</span>(first: <span class="syntax-number">2</span>) { <span class="syntax-field">message</span> }
+  }
+}</pre><p>Fetch connected records in one operation, selecting only the fields your UI needs.</p></article>
+      </div>
+      <div class="concepts"><div><span>01</span><h3>Schema</h3><p>A contract defining available types, fields, arguments, and their relationships.</p></div><div><span>02</span><h3>Query</h3><p>A read operation that specifies exactly which fields to return.</p></div><div><span>03</span><h3>Mutation</h3><p>A write operation for creating or changing data. Public writes are intentionally blocked in this demo.</p></div><div><span>04</span><h3>Resolver</h3><p>Server-side logic that fulfills each field, linking cases to customers and engineers.</p></div></div>
+    </section>
+
+    <section class="playground-section" id="playground"><div class="wrap">
+      <div class="section-heading playground-heading"><div><div class="section-kicker"><span>02</span> / THE PLAYGROUND</div><h2>Now try it yourself<span class="period">.</span></h2><p>Real GraphQL, real validation, real responses. Change the fields, run the query, and see what comes back from the server.</p></div><div id="apiHealth" class="api-health"><span class="health-dot"></span><span>Checking API…</span></div></div>
+      <div class="playground-box">
+        <div class="lab-bar"><div class="lab-title"><span class="lab-icon">{ }</span><div><strong>GraphQL Explorer</strong><small>PUBLIC · READ-ONLY</small></div></div><a id="graphiqlLink" href="/graphql" target="_blank" rel="noopener noreferrer">Open GraphiQL IDE ↗</a></div>
+        <div class="operation-wrap"><div class="operation-label">EXAMPLE OPERATIONS</div><div id="presets" class="presets" role="group" aria-label="Choose an example operation"><button class="preset active" data-preset="nested" aria-pressed="true">Nested query</button><button class="preset" data-preset="filter" aria-pressed="false">Filter</button><button class="preset" data-preset="pagination" aria-pressed="false">Pagination</button><button class="preset" data-preset="introspection" aria-pressed="false">Schema</button><button class="preset" data-preset="validation" aria-pressed="false">Validation error</button><button class="preset" data-preset="auth" aria-pressed="false">Auth failure</button></div></div>
+        <div class="lab-columns">
+          <div class="code-pane"><div class="pane-header"><span><span class="pane-dot purple"></span> REQUEST <code>POST /graphql</code></span><button id="copyQuery" type="button" class="pane-action" aria-label="Copy GraphQL query">Copy query</button></div><label class="sr-only" for="queryEditor">GraphQL operation</label><textarea id="queryEditor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="GraphQL query editor"></textarea><div class="variables-row"><label for="variablesEditor">VARIABLES <span>JSON</span></label><textarea id="variablesEditor" spellcheck="false" aria-label="GraphQL variables">{}</textarea></div><div class="pane-footer"><button id="runQuery" class="button button-primary run-button" type="button"><span id="runIcon">▶</span> Run query <span class="shortcut">⌘↵</span></button><span id="runHint">⌘/Ctrl + Enter to run</span></div></div>
+          <div class="result-pane"><div class="pane-header"><span><span class="pane-dot mint"></span> RESPONSE</span><span id="responseStatus" class="response-status">AWAITING REQUEST</span></div><pre id="responseEditor" class="result-code" aria-live="polite">{
+  "message": "Run a query to inspect the response."
+}</pre><div class="response-footer"><span id="requestMeta">HTTP status · duration · request ID</span><button id="copyResponse" type="button" class="pane-action">Copy JSON</button></div></div>
+        </div>
+        <div class="lesson-note"><span class="lesson-icon">✦</span><div><strong id="lessonTitle">Why nested queries matter</strong><p id="lessonDescription">One operation returns case details and linked customer, assignee, and event data. Remove fields to see how the response changes.</p></div></div>
+      </div>
+      <div class="lab-disclaimer"><span>●</span> Live read-only endpoint: <code>/graphql</code>. Fictional support data only. Protected mutation examples are provided to teach authorization errors; changes cannot be saved to this public demo. <a href="https://github.com/devin-thomas/graphql-test#run-locally" target="_blank" rel="noopener noreferrer">Run the persistent local version ↗</a></div>
+    </div></section>
+
+    <section class="graph-section wrap" id="architecture"><div class="section-heading"><div class="section-kicker"><span>03</span> / THE DATA MODEL</div><h2>Everything is connected<span class="period">.</span></h2><p>Four primary object types and a typed schema make the relationships discoverable. GraphQL clients can inspect this contract using introspection.</p></div>
+      <div class="graph-grid"><div class="model-diagram" aria-label="Data model: SupportCase is connected to Customer, Agent, and CaseEvent"><div class="model-canvas"><div class="connect-line hline"></div><div class="connect-line vline"></div><div class="type-chip customer-chip"><span class="chip-icon">▣</span><div><strong>Customer</strong><small>name · plan</small></div></div><div class="type-chip case-chip"><span class="chip-icon">◇</span><div><strong>SupportCase</strong><small>subject · status · severity</small></div></div><div class="type-chip agent-chip"><span class="chip-icon">♙</span><div><strong>Agent</strong><small>name · team</small></div></div><div class="type-chip event-chip"><span class="chip-icon">≡</span><div><strong>CaseEvent[]</strong><small>type · message · createdAt</small></div></div></div><p>CASEGRAPH / SAMPLE SCHEMA RELATIONSHIPS</p></div>
+      <div class="schema-card"><div class="schema-top"><span>schema.graphql</span><a href="#playground" id="schemaShortcut">Explore with introspection ↗</a></div><pre><span class="syntax-key">type</span> <span class="syntax-name">SupportCase</span> {
+  id: <span class="syntax-type">ID!</span>
+  subject: <span class="syntax-type">String!</span>
+  status: <span class="syntax-type">CaseStatus!</span>
+  severity: <span class="syntax-type">Severity!</span>
+  customer: <span class="syntax-type">Customer!</span>
+  assignee: <span class="syntax-type">Agent</span>
+  events(first: <span class="syntax-type">Int</span>): <span class="syntax-type">[CaseEvent!]!</span>
+}
+
+<span class="syntax-key">type</span> <span class="syntax-name">Query</span> {
+  case(id: <span class="syntax-type">ID!</span>): <span class="syntax-type">SupportCase</span>
+  cases(first: <span class="syntax-type">Int</span>, after: <span class="syntax-type">String</span>): <span class="syntax-type">CaseConnection!</span>
+  metrics: <span class="syntax-type">CaseMetrics!</span>
+}</pre></div></div>
+    </section>
+
+    <section class="debug-section" id="debugging"><div class="wrap"><div class="section-heading"><div class="section-kicker"><span>04</span> / REAL-WORLD TROUBLESHOOTING</div><h2>Errors are part of the lesson<span class="period">.</span></h2><p>GraphQL isn't just about successful queries. Learn how a support engineer distinguishes syntax problems, schema mismatches, authorization failures, and expected empty results.</p></div>
+      <div class="debug-grid"><button class="debug-card" data-jump="validation"><div class="debug-icon">{ ! }</div><div class="debug-tag">SCHEMA</div><h3>Unknown field</h3><p>Request something the schema doesn't define. Read the validation error instead of hunting for another endpoint.</p><span>Reproduce error ↗</span></button><button class="debug-card" data-jump="auth"><div class="debug-icon">⌁</div><div class="debug-tag">SECURITY</div><h3>Authorization denied</h3><p>Try a protected mutation and inspect <code>UNAUTHENTICATED</code> in the GraphQL response.</p><span>Reproduce error ↗</span></button><button class="debug-card" data-jump="pagination"><div class="debug-icon">↳</div><div class="debug-tag">PAGINATION</div><h3>Follow the cursor</h3><p>Use <code>endCursor</code> and <code>hasNextPage</code> to request the next slice without guessing offsets.</p><span>Run pagination ↗</span></button></div>
+      <div class="debug-footer"><span>ENGINEERING NOTE</span><p>A GraphQL response may return HTTP 200 and still contain <code>errors[]</code>. Inspect the response body and extensions, not only the HTTP status.</p></div>
+    </div></section>
+
+    <section class="closing wrap"><div><div class="section-kicker">OPEN SOURCE / BUILT TO LEARN</div><h2>From a query to a<br><span>working system.</span></h2><p>CaseGraph includes a TypeScript server, schema and resolvers, SQLite persistence for local use, typed operations, and tests. Explore the code to see how each layer fits together.</p><div class="closing-actions"><a class="button button-primary" target="_blank" rel="noopener noreferrer" href="https://github.com/devin-thomas/graphql-test">Explore the source ↗</a><a class="button button-secondary" href="/graphql" target="_blank" rel="noopener noreferrer">Open GraphiQL ↗</a></div></div><div class="closing-terminal"><div class="terminal-bar"><span></span><span></span><span></span> <small>terminal</small></div><pre><span>$</span> git clone https://github.com/
+  devin-thomas/graphql-test.git
+<span>$</span> cd graphql-test
+<span>$</span> npm install
+<span>$</span> npm start
+
+<span class="terminal-ok">✓</span> localhost:4000
+<span class="terminal-ok">✓</span> /graphql ready</pre></div></section>
+  </main>
+  <footer class="site-footer"><div class="wrap footer-inner"><a class="footer-brand" href="#top">◈ CaseGraph</a><span>GraphQL field guide • Synthetic data • Read-only hosted demo</span><div><a href="https://github.com/devin-thomas/graphql-test" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://uppercut-labs.com" target="_blank" rel="noopener noreferrer">Uppercut Labs ↗</a></div></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

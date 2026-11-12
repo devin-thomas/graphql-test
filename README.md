@@ -112,3 +112,11 @@ The Docker volume persists SQLite state. Do not expose the app directly to the p
 - `tests/` — persistence, typed mutation, cursor, API validation, HTTP/auth integration tests.
 
 Intended for portfolio and educational use. All customer and case names are fictional.
+
+## Hosted CaseGraph field guide (Vercel)
+
+The public website in `public/` showcases GraphQL concepts and provides an interactive live query lab backed by `api/graphql.ts`, a Vercel Function using the same TypeScript GraphQL schema and synthetic cases as the local application. Vercel serves `/graphql` via a rewrite to the function; GET opens GraphiQL, and POST executes real GraphQL operations.
+
+**Hosting limitation and security:** the public demo uses in-memory SQLite and is intentionally **read-only**. Mutations return `UNAUTHENTICATED`, do not accept any user-provided write token, and no data persists across cold starts. It is not a multi-user support system. For persistent create/assign/status/note mutations, run `npm start` locally or use Docker with a private bearer secret. The two deployments share a schema, not a persistent database.
+
+The Vercel project is linked to the GitHub repository's `main` branch so future pushes deploy the showcase automatically. All example cases and customer names are fictional.
